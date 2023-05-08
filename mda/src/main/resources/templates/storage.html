@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<style>
+		table, thead, tbody, th, td {
+			border:1px solid black;
+		}
+	</style>
+	<head>
+		<meta charset="UTF-8">
+		<title>StoragePage</title>
+	</head>
+	<body>
+		<header>
+			<!--PageName: StorageName-->
+			<h1>Storage</h1>
+		</header>
+		<main>
+			<!--update storing file's name, uri, creator, time-->
+			<section>
+				<!--file list-->
+				<table>
+					<thead>
+						<tr>FileName</tr>
+						<tr>SavedURI</tr>
+						<tr>Author</tr>
+						<tr>Time</tr>
+					</thead>
+					<tbody>
+						<tr th:each="file : ${files.data}">
+							<td th:text="${file.fName}">filename</td>
+							<td th:text="${file.fUri}">.../saved/uri</td>
+							<td th:text="${file.userId}">John Doe</td>
+							<td th:text="${file.time}">20xx.xx.xx 23:59:59</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+			<section>
+				<!--input file buttons-->
+				<h1>File Upload</h1>
+					<form method="post" th:action="upload" enctype="multipart/form-data">
+					<!--
+					<label for="inUserId">Input userid:</label>
+					<input type="text" id="inUserId" name="inUserId" multiple="multiple">
+					-->
+					<label for="files">Select files:</label>
+					<input type="file" id="files" name="files" multiple="multiple">
+					<input type="submit" value="Upload">
+				</form>
+			</section>
+		</main>
+	</body>
+</html>
