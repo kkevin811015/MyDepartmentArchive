@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.boosters.mda.entity.FileStorageEntity;
 
 @Repository
-public interface IFileStoragePersistence extends JpaRepository<FileStorageEntity, String>{
+public interface IFileStorageRepository extends JpaRepository<FileStorageEntity, String> {
 	/*
 	 * JpaRepository provide 'Query Method'.
 	 * And, that pattern is 

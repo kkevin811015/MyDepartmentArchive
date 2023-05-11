@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.boosters.mda.entity.FileStorageEntity;
 import com.boosters.mda.model.FileStorageModel;
-import com.boosters.mda.persistence.IFileStoragePersistence;
+import com.boosters.mda.persistence.IFileStorageRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FileStorageService implements IFileStorageService {
 
 	@Autowired
-	private IFileStoragePersistence fSpersistence;
+	private IFileStorageRepository fSrepo;
 	
 	private final Path root = Paths.get("uploads");
 	
@@ -32,24 +32,24 @@ public class FileStorageService implements IFileStorageService {
 	 * Output: List<FileStorageModel>
 	 * Return: List<FileStorageModel>
 	 * Process: 1) find files from persistence by userId
-	 * 				...persistence.findByUserId(userId) => List<Entity> entities
+	 * 				...repository.findByUserId(userId) => List<Entity> entities
 	 * 			2) convert entities to Model models
 	 * 				...entities.stream.map(new).collect(toList) => List<Model> models
 	 * ETC: Update code later like using Adaptor(service-persistence)
 	 */
 	@Override
 	public List<FileStorageModel> observeFiles(String userId) {
-		// Process 1) find files from persistence by userId
-		List<FileStorageModel> models = fSpersistence.findByUserId(userId).stream()
-														.map(FileStorageModel::new)
-														.collect(Collectors.toList());
+		// Process 1) find files from repository by userId
+		List<FileStorageModel> models = fSrepo.findByUserId(userId).stream()
+												.map(FileStorageModel::new)
+												.collect(Collectors.toList());
 		// Process 2) convert entities to Model models
 		return models;
 	}
 	
 //	public FileStorageModel searchFiles(FileStorageModel model) {
 //		// TODO 현재 storage 상태 보여주는 서비스
-//		fSpersistence.findAll(model.userid);
+//		fSrepo.findAll(model.userid);
 //		return null;
 //	}
 	
@@ -65,7 +65,7 @@ public class FileStorageService implements IFileStorageService {
 	 * 			3) create informations of each model
 	 * 			...forEach{ model.builder.userId(userId).build...
 	 * 			4) convert models to Entity entities and add them to entities
-	 * 			...entities.add(model.toEntity); persistence.save(entities)
+	 * 			...entities.add(model.toEntity); repository.save(entities)
 	 */
 	@Override
 	public boolean storeFiles(String userId, List<MultipartFile> files) {
@@ -99,7 +99,7 @@ public class FileStorageService implements IFileStorageService {
 				
 			}
 			
-			fSpersistence.saveAll(entities);
+			fSrepo.saveAll(entities);
 			
 			return true;
 		} catch (IOException e) {
