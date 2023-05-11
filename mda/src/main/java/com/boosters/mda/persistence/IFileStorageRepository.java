@@ -17,8 +17,8 @@ public interface IFileStorageRepository extends JpaRepository<FileStorageEntity,
 	 */
 	
 	/*
-	 * Function: Find Entity By userid
-	 * SameAs: Select * from storage t where t.userid = ?1;
+	 * Function: Find Entity By userId
+	 * SameAs: Select * from storage t where t.userId = ?1;
 	 */
 	@Query("select s from FileStorageEntity s where s.userId = ?1")
 	List<FileStorageEntity> findByUserId(String userId);
