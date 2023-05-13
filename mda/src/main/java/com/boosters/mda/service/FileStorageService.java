@@ -80,7 +80,7 @@ public class FileStorageService implements IFileStorageService {
 			for(MultipartFile file : files) {
 				// ...Process 2)
 				Files.copy(file.getInputStream(),
-						this.root.resolve(file.getOriginalFilename())
+						this.root.resolve("UUID"+file.getOriginalFilename())
 						);
 				
 				// Process 3)
