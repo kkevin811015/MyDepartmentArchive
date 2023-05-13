@@ -6,13 +6,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.boosters.mda.dto.FileStorageDTO;
 import com.boosters.mda.entity.FileStorageEntity;
-import com.boosters.mda.model.FileStorageModel;
 import com.boosters.mda.persistence.IFileStorageRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,18 +32,17 @@ public class FileStorageService implements IFileStorageService {
 	 * Return: List<FileStorageModel>
 	 * Process: 1) find files from persistence by userId
 	 * 				...repository.findByUserId(userId) => List<Entity> entities
-	 * 			2) convert entities to Model models
+	 * 			2) return entities to Controller
 	 * 				...entities.stream.map(new).collect(toList) => List<Model> models
 	 * ETC: Update code later like using Adaptor(service-persistence)
 	 */
 	@Override
-	public List<FileStorageModel> observeFiles(String userId) {
+	public List<FileStorageEntity> observeFiles(String userId) {
 		// Process 1) find files from repository by userId
-		List<FileStorageModel> models = fSrepo.findByUserId(userId).stream()
-												.map(FileStorageModel::new)
-												.collect(Collectors.toList());
-		// Process 2) convert entities to Model models
-		return models;
+		List<FileStorageEntity> entities = fSrepo.findByUserId(userId);
+		// Process 2) return entities to Controller
+		return entities;
+		// return시 dto로 리턴할지 고민 중
 	}
 	
 //	public FileStorageModel searchFiles(FileStorageModel model) {
@@ -86,16 +84,17 @@ public class FileStorageService implements IFileStorageService {
 						);
 				
 				// Process 3)
-				FileStorageModel model = FileStorageModel.builder()
+				FileStorageDTO dto = FileStorageDTO.builder()
 											.id("test"+file.getOriginalFilename())
 											.userId(userId)
-											.fName(file.getOriginalFilename())
+											.fOrgName(file.getOriginalFilename())
+											.fUUIDName("testUUID"+file.getOriginalFilename())
 											.fUri(this.root.toString())
 											.time("savedtime")
 											.build();
 				
 				// Process 4)
-				entities.add(FileStorageModel.toEntity(model));
+				entities.add(FileStorageDTO.toEntity(dto));
 				
 			}
 			

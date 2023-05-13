@@ -25,7 +25,8 @@ public class FileStorageEntity {
 	@GenericGenerator(name="system-uuid", strategy="uuid")
 	private String id;
 	private String userId;
-	private String fName;
+	private String fOrgName;
+	private String fUUIDName;
 	private String fUri;
 	private String time;
 }

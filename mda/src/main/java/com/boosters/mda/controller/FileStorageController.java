@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.boosters.mda.dto.FileStorageDTO;
 import com.boosters.mda.dto.ResponseDTO;
-import com.boosters.mda.model.FileStorageModel;
+import com.boosters.mda.entity.FileStorageEntity;
 import com.boosters.mda.service.FileStorageService;
 
 @RestController
@@ -42,8 +42,9 @@ public class FileStorageController {
 		
 		// Process Set:
 		// Response Load From Service
-		List<FileStorageModel>models = fStorageService.observeFiles(user);
-		List<FileStorageDTO> dtos = models.stream()
+		// 변경 예정
+		List<FileStorageEntity>entities = fStorageService.observeFiles(user);
+		List<FileStorageDTO> dtos = entities.stream()
 											.map(FileStorageDTO::new)
 											.collect(Collectors.toList());
 		
@@ -88,26 +89,6 @@ public class FileStorageController {
 	
 	
 	// !! Backup !!
-	/*
-	 * Function: File List Display Controller
-	 * Method: Get
-	 * Request: None
-	 * Response: DTO: Files{ File{ fname, uri, userid, time }, ...iteration }
-	 * Return: ModelAndView("storage[.html]")
-	 * Process: ...service.StorageManagement.FilesDisplay(Model)
-	 */
-	/*
-	@GetMapping
-	public ModelAndView FileListDisplay() {
-		ModelAndView mv = new ModelAndView("storage"); // 타일즈에서 설정됨
-		String test = "One Step, One Success";
-		
-//		model.addAttribute("test", test);
-		mv.addObject("test", test);
-		
-		return mv;
-	}
-	*/
 	/*
 	@PostMapping("/upload")
 	public ResponseEntity<ResponseMessage> FileUploadController(

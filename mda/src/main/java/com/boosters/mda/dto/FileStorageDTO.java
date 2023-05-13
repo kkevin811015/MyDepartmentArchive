@@ -1,6 +1,6 @@
 package com.boosters.mda.dto;
 
-import com.boosters.mda.model.FileStorageModel;
+import com.boosters.mda.entity.FileStorageEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,25 +12,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class FileStorageDTO {
-	private String id;
+	private String id; // 삭제 예정
 	private String userId;
-	private String fName;
+	private String fOrgName;
+	private String fUUIDName;
 	private String fUri;
 	private String time;
 	
-	public FileStorageDTO(final FileStorageModel model) {
-		this.id = model.getId();
-		this.userId = model.getUserId();
-		this.fName = model.getFName();
-		this.fUri = model.getFUri();
-		this.time = model.getTime();
+	public FileStorageDTO(final FileStorageEntity entity) {
+		this.id = entity.getId(); // 삭제 예정
+		this.userId = entity.getUserId();
+		this.fOrgName = entity.getFOrgName();
+		this.fUUIDName = entity.getFUUIDName();
+		this.fUri = entity.getFUri();
+		this.time = entity.getTime();
 	}
 	
-	public static FileStorageModel toModel(final FileStorageDTO dto) {
-		return FileStorageModel.builder()
+	// 모델 -> 엔티티 변경 예정
+	public static FileStorageEntity toEntity(final FileStorageDTO dto) {
+		return FileStorageEntity.builder()
 				.id(dto.getId())
 				.userId(dto.getUserId())
-				.fName(dto.getFName())
+				.fOrgName(dto.getFOrgName())
+				.fUUIDName(dto.getFUUIDName())
 				.fUri(dto.getFUri())
 				.time(dto.getTime())
 				.build();
