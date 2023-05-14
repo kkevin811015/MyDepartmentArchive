@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,11 +38,14 @@ public class FileStorageService implements IFileStorageService {
 	 * ETC: Update code later like using Adaptor(service-persistence)
 	 */
 	@Override
-	public List<FileStorageEntity> observeFiles(String userId) {
+	public List<FileStorageDTO> observeFiles(String userId) {
 		// Process 1) find files from repository by userId
 		List<FileStorageEntity> entities = fSrepo.findByUserId(userId);
+		List<FileStorageDTO> dtos = entities.stream()
+				.map(FileStorageDTO::new)
+				.collect(Collectors.toList());
 		// Process 2) return entities to Controller
-		return entities;
+		return dtos;
 		// return시 dto로 리턴할지 고민 중
 	}
 	

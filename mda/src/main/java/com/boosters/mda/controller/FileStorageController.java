@@ -36,17 +36,14 @@ public class FileStorageController {
 	 */
 	// Method Set
 	@GetMapping
-	public ModelAndView FileListDisplayController(@PathVariable("user") String user) {
+	public ModelAndView FileListDisplayController(@PathVariable("user") String userId) {
 		// View Set:
 		mnv = new ModelAndView("storage");
 		
 		// Process Set:
 		// Response Load From Service
 		// 변경 예정
-		List<FileStorageEntity>entities = fStorageService.observeFiles(user);
-		List<FileStorageDTO> dtos = entities.stream()
-											.map(FileStorageDTO::new)
-											.collect(Collectors.toList());
+		List<FileStorageDTO> dtos = fStorageService.observeFiles(userId);
 		
 		ResponseDTO<FileStorageDTO> filesInfo = ResponseDTO.<FileStorageDTO>builder()
 															.data(dtos)
