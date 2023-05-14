@@ -87,8 +87,7 @@ public class FileStorageService implements IFileStorageService {
 				FileStorageDTO dto = FileStorageDTO.builder()
 											.id("test"+file.getOriginalFilename())
 											.userId(userId)
-											.fOrgName(file.getOriginalFilename())
-											.fUUIDName("testUUID"+file.getOriginalFilename())
+											.fName(file.getOriginalFilename())
 											.fUri(this.root.toString())
 											.time("savedtime")
 											.build();

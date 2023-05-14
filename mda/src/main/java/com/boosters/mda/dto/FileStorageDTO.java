@@ -14,16 +14,14 @@ import lombok.NoArgsConstructor;
 public class FileStorageDTO {
 	private String id; // 삭제 예정
 	private String userId;
-	private String fOrgName;
-	private String fUUIDName;
+	private String fName;
 	private String fUri;
 	private String time;
 	
 	public FileStorageDTO(final FileStorageEntity entity) {
 		this.id = entity.getId(); // 삭제 예정
 		this.userId = entity.getUserId();
-		this.fOrgName = entity.getFOrgName();
-		this.fUUIDName = entity.getFUUIDName();
+		this.fName = entity.getFOrgName();
 		this.fUri = entity.getFUri();
 		this.time = entity.getTime();
 	}
@@ -33,8 +31,8 @@ public class FileStorageDTO {
 		return FileStorageEntity.builder()
 				.id(dto.getId())
 				.userId(dto.getUserId())
-				.fOrgName(dto.getFOrgName())
-				.fUUIDName(dto.getFUUIDName())
+				.fOrgName(dto.getFName())
+				.fUUIDName("UUID"+dto.getFName())
 				.fUri(dto.getFUri())
 				.time(dto.getTime())
 				.build();
