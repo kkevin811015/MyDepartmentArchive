@@ -29,10 +29,10 @@ public class FileStorageController {
 	/*
 	 * Function: File List Display Controller
 	 * Method: Get
-	 * Request: null
+	 * Request: userId
 	 * Response: DTO: Files{ File{ fname, uri, userid, time }, ...iteration }
 	 * Return: ModelAndView("storage[.html]")
-	 * Process: ...service.StorageManagement.FilesSearch(Model)
+	 * Process: ...service.StorageManagement.observeFile(userId)
 	 */
 	// Method Set
 	@GetMapping
@@ -58,10 +58,10 @@ public class FileStorageController {
 	/*
 	 * Function: File Upload Controller
 	 * Method: Post
-	 * Request: Form: MultipartFile, userid
+	 * Request: Form: MultipartFile, userId
 	 * Response: None
 	 * Return: Message: "File Uploaded"
-	 * Process: ...service.StorageManagement.FilesStore(MultipartFile, userid)
+	 * Process: ...service.StorageManagement.FilesStore(MultipartFile, userId)
 	 */
 	// Method Set
 	@PostMapping("/upload")

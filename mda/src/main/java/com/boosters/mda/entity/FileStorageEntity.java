@@ -1,9 +1,13 @@
 package com.boosters.mda.entity;
 
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 
@@ -29,8 +33,10 @@ public class FileStorageEntity extends BaseTimeEntity {
 	private String extension;
 	private String savedUri;
 }
-//@GeneratedValue(generator="system-uuid")
-//@GenericGenerator(name="system-uuid", strategy="uuid")
+/* !! Backup !!
+ * @GeneratedValue(generator="system-uuid")
+ * GenericGenerator(name="system-uuid", strategy="uuid")
+ */
 /*
 권장하는 식별자 구성 전략
 (Long형) + (대체키) + (적절한 키 생성 전략) 사용

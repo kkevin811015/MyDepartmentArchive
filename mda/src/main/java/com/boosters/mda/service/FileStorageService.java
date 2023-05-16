@@ -28,50 +28,47 @@ public class FileStorageService implements IFileStorageService {
 	private final Path root = Paths.get("uploads");
 	
 	/*
-	 * Function: Serach Files
+	 * Function: Observe Files
 	 * Input: userId
 	 * Output: List<FileStorageModel>
 	 * Return: List<FileStorageModel>
 	 * Process: 1) find files from persistence by userId
 	 * 				...repository.findByUserId(userId) => List<Entity> entities
 	 * 			2) return entities to Controller
-	 * 				...entities.stream.map(new).collect(toList) => List<Model> models
+	 * 				...entities.stream.map(new).collect(toList) => List<DTO> dtos
 	 * ETC: Update code later like using Adaptor(service-persistence)
 	 */
 	@Override
 	public List<FileStorageDTO> observeFiles(String userId) {
 		// Process 1) find files from repository by userId
 		List<FileStorageEntity> entities = fSrepo.findByUserId(userId);
+		// Process 2) create dtos from entities
 		List<FileStorageDTO> dtos = entities.stream()
 				.map(FileStorageDTO::new)
 				.collect(Collectors.toList());
 		// Process 2) return entities to Controller
 		return dtos;
-		// return시 dto로 리턴할지 고민 중
 	}
 	
-//	public FileStorageModel searchFiles(FileStorageModel model) {
-//		// TODO 현재 storage 상태 보여주는 서비스
-//		fSrepo.findAll(model.userid);
-//		return null;
-//	}
-	
 	/*
-	 * Function: Search Files
+	 * Function: Store Files
 	 * Input: { userId, MultipartFile }
 	 * Output: boolean, List<FileStorageEntity> entities
 	 * Return: boolean that file saved/unsaved 
 	 * Process: 1) create entityList instead of Controller for saving
 	 * 			...new List<Entity> entities
-	 * 			1) save files to local drive by using forEach
+	 * 			2) create informations of each file
+	 * 			...forEach{ entity.builder.userId(userId)....build...
+	 * 			3) save files to local drive by using forEach
 	 * 			...forEach(file) { file.copy(localUri) ...
-	 * 			3) create informations of each model
-	 * 			...forEach{ model.builder.userId(userId).build...
-	 * 			4) convert models to Entity entities and add them to entities
-	 * 			...entities.add(model.toEntity); repository.save(entities)
+	 * 			4) add entity to entities
+	 * 			...entities.add(entity); repository.saveAll(entities)
 	 */
 	@Override
 	public boolean storeFiles(String userId, List<MultipartFile> files) {
+		
+		// local variables
+		UUID uuid = UUID.randomUUID();
 		
 		// Process 1)
 		List<FileStorageEntity> entities;
@@ -83,17 +80,28 @@ public class FileStorageService implements IFileStorageService {
 			
 			// Process 2)
 			for(MultipartFile file : files) {
+				// file information variables
+				// Who specified like userId
+				// When automatically created by JpaAuditing
+				// Where specified like this.root
+				// What 1 ContentType
+				String fileContentType = file.getContentType();
+				// What 2 fileName
+				String fileName = file.getOriginalFilename();
+				// What 3 UUID-fileName
+				String uuidFileName = uuid.toString() + "-" + fileName;
+				// What 4 file's extension
+				String fileExtension = fileName.substring(fileName.lastIndexOf("."));
 				
-				// Process )
+				// ...Process 2)
 				FileStorageDTO dto = FileStorageDTO.builder()
 											.userId(userId)
 											.fName(file.getOriginalFilename())
 											.fUri(this.root.toString())
 											.build();
-				
-				// ...Process 2)
+				// ...Process 3)
 				Files.copy(file.getInputStream(),
-						this.root.resolve(UUID.randomUUID().toString()+file.getOriginalFilename())
+						this.root.resolve(uuid.toString()+file.getOriginalFilename())
 						);
 				
 				// Process 3)
@@ -101,24 +109,15 @@ public class FileStorageService implements IFileStorageService {
 											.userId(userId) // Who
 											// When(automatically created by JpaAuditing)
 											.savedUri(this.root.toString()) // Where
-											.contentType(file.getContentType())	// What 1
-											.fUUIDName( // What 2
-													UUID.randomUUID().toString() + "-" + file.getOriginalFilename()
-													)
-											.fOrgName(file.getOriginalFilename()) // What 3 
-											.extension( // What 4
-													file.getOriginalFilename()
-														.substring(file.getOriginalFilename()
-																	.lastIndexOf(".")
-																	)
-													)
+											.contentType(fileContentType)	// What 1
+											.fUUIDName(uuidFileName) // What 2
+											.fOrgName(fileName) // What 3 
+											.extension(fileExtension) // What 4
 											.build();
-				
 				// Process 4)
 				entities.add(entity);
-				
 			}
-			
+			// ...Process 4)
 			fSrepo.saveAll(entities);
 			
 			return true;

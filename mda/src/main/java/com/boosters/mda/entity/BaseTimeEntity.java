@@ -14,11 +14,11 @@ import lombok.Getter;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {// JpaAudit으로 시간기록 자동화
-	// createdDate: 작성일
+	// createdDate: DB기준 작성일
 	@CreatedDate
 	public LocalDateTime createdDate;
 	
-    // modifiedDate: 수정일
+    // modifiedDate: DB기준 수정일
 	@LastModifiedDate
 	private LocalDateTime modifiedDate;
 }

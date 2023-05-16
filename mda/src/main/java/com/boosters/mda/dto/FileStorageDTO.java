@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class FileStorageDTO {
 	
-	private Long id; // 삭제 예정
+	private Long id;
+	
 	// Who
 	private String userId;
 	
