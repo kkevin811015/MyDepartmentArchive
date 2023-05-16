@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,22 +83,39 @@ public class FileStorageService implements IFileStorageService {
 			
 			// Process 2)
 			for(MultipartFile file : files) {
-				// ...Process 2)
-				Files.copy(file.getInputStream(),
-						this.root.resolve("UUID"+file.getOriginalFilename())
-						);
 				
-				// Process 3)
+				// Process )
 				FileStorageDTO dto = FileStorageDTO.builder()
-											.id("test"+file.getOriginalFilename())
 											.userId(userId)
 											.fName(file.getOriginalFilename())
 											.fUri(this.root.toString())
-											.time("savedtime")
+											.build();
+				
+				// ...Process 2)
+				Files.copy(file.getInputStream(),
+						this.root.resolve(UUID.randomUUID().toString()+file.getOriginalFilename())
+						);
+				
+				// Process 3)
+				FileStorageEntity entity = FileStorageEntity.builder()
+											.userId(userId) // Who
+											// When(automatically created by JpaAuditing)
+											.savedUri(this.root.toString()) // Where
+											.contentType(file.getContentType())	// What 1
+											.fUUIDName( // What 2
+													UUID.randomUUID().toString() + "-" + file.getOriginalFilename()
+													)
+											.fOrgName(file.getOriginalFilename()) // What 3 
+											.extension( // What 4
+													file.getOriginalFilename()
+														.substring(file.getOriginalFilename()
+																	.lastIndexOf(".")
+																	)
+													)
 											.build();
 				
 				// Process 4)
-				entities.add(FileStorageDTO.toEntity(dto));
+				entities.add(entity);
 				
 			}
 			

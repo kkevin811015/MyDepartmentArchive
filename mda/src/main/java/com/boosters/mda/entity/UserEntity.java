@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name="ServiceUser")
-public class UserEntity {
+public class UserEntity extends BaseTimeEntity {
 
 	@Id
 	private String userId;			// 사용자ID
