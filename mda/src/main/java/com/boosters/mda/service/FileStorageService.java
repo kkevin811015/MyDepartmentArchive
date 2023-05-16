@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +26,9 @@ public class FileStorageService implements IFileStorageService {
 	@Autowired
 	private IFileStorageRepository fSrepo;
 	
-	private final Path root = Paths.get("uploads");
+//	@Value("${file.dir}")
+//	private final String root;
+	private final Path root = Paths.get("D:/SWdevelop/workspace/Boosters/TESTCONTAINER");
 	
 	/*
 	 * Function: Observe Files
@@ -101,7 +104,7 @@ public class FileStorageService implements IFileStorageService {
 											.build();
 				// ...Process 3)
 				Files.copy(file.getInputStream(),
-						this.root.resolve(uuid.toString()+file.getOriginalFilename())
+						this.root.resolve(uuid.toString()+"-"+file.getOriginalFilename())
 						);
 				
 				// Process 3)

@@ -63,27 +63,40 @@ public class FileStorageController {
 	 * Return: Message: "File Uploaded"
 	 * Process: ...service.StorageManagement.FilesStore(MultipartFile, userId)
 	 */
-	// Method Set
 	@PostMapping("/upload")
-	public ModelAndView FileUploadController( // Request Set
+	public ModelAndView FileUploadController(
 			@PathVariable("user") String userId,
 			@RequestParam("files") List<MultipartFile> files
 			) {
 		
-		// Process Set: FilesStore
 		boolean filesave = fStorageService.storeFiles(userId, files);
 		
-		
-		if (filesave) {
-			// Return Set: message "File Uploaded"
+		if (filesave) { // Succeed
+			
 			mnv.setViewName("redirect:/storage/"+userId+"/");
-		}else {
-			// Return Set: message "File Upload Failed"
+		}else { // Failed
+			
 			mnv.setViewName("redirect:/");
 		}
 		return mnv;
 	}
 	
+	/*
+	 * Function: File Download Controller
+	 * Method: Get
+	 * Request: file Uri
+	 * Response: files from specified path
+	 * Return: files
+	 * 			Message: "File Uploaded"
+	 * Process: ...
+	 */
+	@GetMapping("/download")
+	public ModelAndView FileDownloadController(@PathVariable("user") String userId) {
+		
+		mnv.setViewName("redirect:/storage/"+userId+"/");
+		
+		return mnv;
+	}
 	
 	// !! Backup !!
 	/*

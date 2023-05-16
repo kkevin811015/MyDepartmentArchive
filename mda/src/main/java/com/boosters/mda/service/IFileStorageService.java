@@ -13,7 +13,7 @@ public interface IFileStorageService {
 
 	public boolean storeFiles(String userId, List<MultipartFile> files);
 	
-//	public Resource load(String filename);
+//	public Resource loadFiles(String fileName);
 	
 //	public void deleteAll();
 	
