@@ -1,4 +1,4 @@
-package com.mytest.TestDB.File;
+package com.mytest.TestDB.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,19 +16,19 @@ import lombok.Setter;
 @Entity
 @Getter //getter setter은 없는거 추가한거임.
 @Setter
-public class FileEntity {
+public class FileStorageEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="file_id")
 	private Long id;
-	
+	private String userId;
 	private String orgNm;
 	private String saveNm;
 	private String savedPath;
 	
 	@Builder
-	public FileEntity(Long id, String orgNm, String savedNm, String savedPath) {
+	public FileStorageEntity(Long id, String orgNm, String savedNm, String savedPath) {
 		this.id = id;
 		this.orgNm = orgNm;
 		this.saveNm = savedNm;
