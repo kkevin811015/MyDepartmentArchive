@@ -11,7 +11,7 @@ public class MainController {
 	public String index() {
 		return "hi";
 	}
-	
+//	asdfasdf
 	@GetMapping("/")
 	public String root() {
 		return "redirect:/view";

@@ -26,7 +26,7 @@ public class FileStorageService implements IFileStorageService {
 //	autowired 붙여줬다. 혹시모르니까... 컨트롤러에서도 동일하게 autowired 넣어줬다. 이상 없는지 확인할 것...
 	@Autowired
 	private IFileStoragePersistence fPersistence;
-	private final Path root = Paths.get("uploads");
+	private final Path root = Paths.get("d:/dbTest");
 	
 	
 	@Override
@@ -52,7 +52,7 @@ public class FileStorageService implements IFileStorageService {
 			String savedPath = root + savedName;
 			
 			Files.copy(file.getInputStream(),
-					this.root.resolve(file.getOriginalFilename()));
+					this.root.resolve(savedName));
 			
 			
 			//process 3
@@ -69,6 +69,8 @@ public class FileStorageService implements IFileStorageService {
 					.orgNm(origName)
 					.savedNm(savedName)
 					.savedPath(savedPath)
+					.userId(userId)
+					.time("savedtime")
 					.build();
 			entities.add(entity);
 			

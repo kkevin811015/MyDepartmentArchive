@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/storage/{user}/*")
+@RequestMapping("/storage/{user}/upload")
 public class UploadController {
 //	@autowired? contructor and setter...? whyyyy so annotation requiredargsconstructor.
 	@Autowired
@@ -27,17 +27,19 @@ public class UploadController {
 	ModelAndView mnv;
 	
 //	//upload code
-//	@GetMapping("/upload")
-//	public String testUploadForm() {
-//		return "file_upload_form";
-//	}
+	@GetMapping
+	public ModelAndView testUploadForm(@PathVariable("user") String userId) {
+		mnv = new ModelAndView();
+		mnv.setViewName("uploader");
+		return mnv;
+	}
 	
-	@PostMapping("/upload")
+	@PostMapping
 	public ModelAndView uploadFile(@PathVariable("user") String userId,
 			@RequestParam("files") List<MultipartFile> files)
 					throws IOException {
 		fileService.storeFiles(userId, files);
-		mnv.setViewName("redirect:/strorage/"+userId+"/");
+		mnv.setViewName("redirect:/storage/"+userId+"/download");
 		return mnv;
 	}
 	

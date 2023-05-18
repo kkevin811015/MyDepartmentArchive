@@ -26,13 +26,16 @@ public class FileStorageEntity {
 	private String orgNm;
 	private String saveNm;
 	private String savedPath;
+	private String time;
 	
 	@Builder
-	public FileStorageEntity(Long id, String orgNm, String savedNm, String savedPath) {
+	public FileStorageEntity(Long id, String orgNm, String savedNm, String savedPath, String userId, String time) {
 		this.id = id;
 		this.orgNm = orgNm;
 		this.saveNm = savedNm;
 		this.savedPath = savedPath;
+		this.userId = userId;
+		this.time = time;
 	}
 	
 }

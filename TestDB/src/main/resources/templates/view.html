@@ -1,19 +1,42 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<style>
+		table, thead, tbody, th, td {
+			border:1px solid black;
+		}
+	</style>
 	<head>
 		<meta charset="UTF-8">
-		<title>Title</title>
+		<title>StoragePage</title>
 	</head>
 	<body>
-		<h3>이미지 출력</h3>
-		<div th:each="imageFile : ${all} ">
-			<img  th:src="|/images/${imageFile.id}|" width="150" height="150">
-			<p th:text="${imageFile.orgNm}"></p>
-		</div>
-		
-		<h3>파일 다운로드</h3>
-		<div th:each="file : ${all}">
-			<a th:href="|/attach/${file.id}|" th:text="${file.orgNm}"></a>
-		</div>
+		<header>
+			<!--PageName: StorageName-->
+			<h1>Storage</h1>
+		</header>
+		<main>
+			<!--update storing file's name, uri, creator, time-->
+			<section>
+				<!--file list-->
+				<table>
+					<thead>
+						<tr>index</tr>
+						<tr>FileName</tr>
+						<tr>SavedURI</tr>
+						<tr>Author</tr>
+						<tr>Time</tr>
+					</thead>
+					<tbody>
+						<tr th:each="file : ${files.data}">
+							<td th:text="${file.id}"></td>
+							<td th:text="${file.orgNm}"></td>
+							<td th:text="${file.savedPath}"></td>
+							<td th:text="${file.userId}"></td>
+							<td th:text="${file.time}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</main>
 	</body>
 </html>

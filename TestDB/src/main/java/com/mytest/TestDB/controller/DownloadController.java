@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/storage/{user}/*")
+@RequestMapping("/storage/{user}")
 public class DownloadController {
 //	private final FileService fileService
 	@Autowired
