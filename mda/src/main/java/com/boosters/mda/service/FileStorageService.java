@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -131,5 +132,33 @@ public class FileStorageService implements IFileStorageService {
 		}
 		
 	}
+	
+//	/*
+//	 * Function: Load File
+//	 * Input: { userId, fileName }
+//	 * Output: Resource file, List<FileStorageEntity> entities
+//	 * Return: Resource files
+//	 * Process: 
+//	 */
+//	@Override
+//	public Resource loadFile(String userId, String fileName) {
+//		
+//		return null;
+//	}
+//
+//	/*
+//	 * Function: Load Files
+//	 * Input: { userId, fileNames }
+//	 * Output: List<Resource> files, List<FileStorageEntity> entities
+//	 * Return: List<Resource> files
+//	 * Process: 
+//	 */
+//	@Override
+//	public List<Resource> loadFiles(String userId, List<String> fileNames) {
+//		
+////		List<FileStorageEntity> entities = fSrepo.findByUserIdAndFOrgName(userId)
+//		
+//		return null;
+//	}
 	
 }

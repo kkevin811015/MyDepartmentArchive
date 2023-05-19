@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,22 +84,53 @@ public class FileStorageController {
 		return mnv;
 	}
 	
-	/*
-	 * Function: File Download Controller
-	 * Method: Get
-	 * Request: file Uri
-	 * Response: files from specified path
-	 * Return: files
-	 * 			Message: "File Uploaded"
-	 * Process: ...
-	 */
-	@GetMapping("/download")
-	public ModelAndView FileDownloadController(@PathVariable("user") String userId) {
-		
-		mnv.setViewName("redirect:/storage/"+userId+"/");
-		
-		return mnv;
-	}
+//	/*
+//	 * Function: File Download Controller
+//	 * Method: Get
+//	 * Request: file Uri
+//	 * Response: files from specified path
+//	 * Return: files
+//	 * 			Message: "File Uploaded"
+//	 * Process: ...
+//	 */
+//	@GetMapping("/download/{fileName:.+}")
+//	public ResponseEntity<Resource> exampleFileDownloadController(
+//			@PathVariable("user") String userId,
+//			@PathVariable("fileName") String fileName) {
+//		
+//		Resource file = fStorageService.loadFile(userId, fileName);
+//		
+////		mnv.setViewName("redirect:/storage/"+userId+"/");
+//		
+//		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+//				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+//	}
+//	
+//	
+//	/*
+//	 * Function: File Download Controller
+//	 * Method: Get
+//	 * Request: file Uri
+//	 * Response: files from specified path
+//	 * Return: files
+//	 * 			Message: "File Uploaded"
+//	 * Process: ...
+//	 */
+//	@GetMapping("/download/{files}")
+//	public ResponseEntity<List<Resource>> FileDownloadController(
+//			@PathVariable("user") String userId,
+//			@PathVariable("files") List<String> fileNames) {
+//		
+//		// 1) request validation
+//		//		pass...
+//		
+//		// 2) call searching function from service layer
+//		List<Resource> file = fStorageService.loadFiles(userId, fileNames);
+//		
+////		mnv.setViewName("redirect:/storage/"+userId+"/");
+//		
+//		return null;
+//	}
 	
 	// !! Backup !!
 	/*

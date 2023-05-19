@@ -20,6 +20,9 @@ public interface IFileStorageRepository extends JpaRepository<FileStorageEntity,
 	 * Function: Find Entity By userId
 	 * SameAs: Select * from storage t where t.userId = ?1;
 	 */
-	@Query("select s from FileStorageEntity s where s.userId = ?1")
+//	@Query("select s from FileStorageEntity s where s.userId = ?1")
 	List<FileStorageEntity> findByUserId(String userId);
+	
+//	@Query("select s from FileStorageEntity s where s.userId = ?1 and s.fOrgName in ?2")
+//	List<FileStorageEntity> findByUserIdAndFOrgNameIn(String userId, List<String> fOrgNames);
 }
