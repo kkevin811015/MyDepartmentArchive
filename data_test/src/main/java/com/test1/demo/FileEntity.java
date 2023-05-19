@@ -7,33 +7,33 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @NoArgsConstructor
 @Table(name="file")
 @Entity
-@Getter //getter setter은 없는거 추가한거임.
-@Setter
+@Data
 public class FileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="file_id")
     private Long id;
-    
-    private String orgNm;
-    
+    private String orgNm;   
     private String savedNm;
-    
     private String savedPath;
+    private String savedTime;
 
     @Builder
-    public FileEntity(Long id, String orgNm, String savedNm, String savedPath) {
+    public FileEntity(Long id, String orgNm, String savedNm, String savedPath,String savedTime) {
         this.id = id;
         this.orgNm = orgNm;
         this.savedNm = savedNm;
         this.savedPath = savedPath;
+        this.savedTime = savedTime;
     }
+    
+
 
 }

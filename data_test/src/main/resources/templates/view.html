@@ -9,6 +9,8 @@
 		<div th:each="imageFile : ${all} ">
 			<img  th:src="|/images/${imageFile.id}|" width="150" height="150">
 			<p th:text="${imageFile.orgNm}"></p>
+			<p th:text="${imageFile.savedTime}"></p>
+			
 		</div>
 		
 		<h3>파일 다운로드</h3>

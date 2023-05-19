@@ -2,6 +2,8 @@ package com.test1.demo;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +15,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class FileService {
-	@Value("${file.dir}")
+	@Value("${f.dir}")
     private String fileDir;
 
     private final FileRepository fileRepository;
+    
+    private String getCurrentTimeAsString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date currentTime = new Date();
+        return dateFormat.format(currentTime);
+    }
 
     public Long saveFile(MultipartFile files) throws IOException {
         if (files.isEmpty()) {
@@ -37,12 +45,17 @@ public class FileService {
 
         // 파일을 불러올 때 사용할 파일 경로
         String savedPath = fileDir + savedName;
-
+        
+        String savedTime = getCurrentTimeAsString();
+        
+      
+       
         // 파일 엔티티 생성
         FileEntity file = FileEntity.builder()
                 .orgNm(origName)
                 .savedNm(savedName)
                 .savedPath(savedPath)
+                .savedTime(savedTime)
                 .build();
 
         // 실제로 로컬에 uuid를 파일명으로 저장
@@ -53,5 +66,5 @@ public class FileService {
 
         return savedFile.getId();
     }
-
 }
+

@@ -26,11 +26,9 @@ public class TestController {
 	    private final FileService fileService;
 	    private final FileRepository fileRepository;
 	    
-	    @GetMapping("/")
-	    public String root() {
-	    	return "redirect:/view";
-	    }
-
+	
+	    
+	 
 	    @GetMapping("/upload")
 	    public String testUploadForm() {
 
@@ -40,12 +38,14 @@ public class TestController {
 	    @PostMapping("/upload")
 	    public String uploadFile(@RequestParam("file") MultipartFile file,@RequestParam("files") List<MultipartFile> files) throws IOException {
 	        fileService.saveFile(file);
+	        
 
 	        for (MultipartFile multipartFile : files) {
 	            fileService.saveFile(multipartFile);
 	        }
 
 	        return "redirect:/view";
+	     
 	    }
 	    @GetMapping("/view")
 	    public String view(Model model) {
@@ -55,11 +55,10 @@ public class TestController {
 	        return "view";
 	    }
 
-
 	    //   이미지 출력
 	    @GetMapping("/images/{fileId}")
 	    @ResponseBody
-	    public UrlResource downloadImage(@PathVariable("fileId") Long id, Model model) throws IOException{
+	    public UrlResource downloadImage(@PathVariable("fileId") Long id) throws IOException{
 
 	        FileEntity file = fileRepository.findById(id).orElse(null);
 	        return new UrlResource("file:" + file.getSavedPath());
