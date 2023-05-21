@@ -112,7 +112,6 @@ public class FileStorageController {
 //				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
 //	}
 	
-	
 	/* ZIP 파일 리턴으로 계획
 	 * Function: File Download Controller
 	 * Method: Get
@@ -121,6 +120,54 @@ public class FileStorageController {
 	 * Return: zip file
 	 * Process: ...
 	 */
+	@GetMapping("/downlad/{file}")
+    public ResponseEntity<UrlResource> downloadAttach(
+    		@PathVariable("user") String userId,
+    		@PathVariable("file") String fileName) throws IOException {
+
+		// Process 1) request validation
+				//				pass...
+
+		// Process 2) call searching function from service layer
+		UrlResource resource = fStorageService.loadUrlResourcefromFile(userId, fileName);
+
+		// Process 3) Create and Return ResponseEntity
+        String encodedFileName = UriUtils.encode(fileName, StandardCharsets.UTF_8);
+
+        String contentDisposition = "attachment; filename=\"" + encodedFileName + "\"";
+
+        // ...Process 3)
+        return ResponseEntity.ok()
+        					.header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition)
+        					.body(resource);
+    }
+	
+	// !! Backup !!
+	/*
+	@PostMapping("/upload")
+	public ResponseEntity<ResponseMessage> FileUploadController(
+			@RequestParam("file") MultipartFile file) {
+		String message = "";
+		try {
+			fStoragesService.save(file);
+			
+			message = "Uploaded the file successfully: " + file.getOriginalFilename();
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+		}catch (Exception e) {
+		      message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
+		      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+		    }
+		
+	}
+	
+	ZIP 파일 리턴으로 계획
+	 * Function: File Download Controller
+	 * Method: Get
+	 * Request: files Uri
+	 * Response: zip file from files specified path
+	 * Return: zip file
+	 * Process: ...
+	 
 	@GetMapping("/download/{file}")
 	public ResponseEntity<ByteArrayResource> FileDownloadController(
 			@PathVariable("user") String userId,
@@ -147,50 +194,5 @@ public class FileStorageController {
 									.body(file);
 	}
 	
-	/* ZIP 파일 리턴으로 계획
-	 * Function: File Download Controller
-	 * Method: Get
-	 * Request: files Uri
-	 * Response: zip file from files specified path
-	 * Return: zip file
-	 * Process: ...
-	 */
-	@GetMapping("/attach/{file}")
-    public ResponseEntity<UrlResource> downloadAttach(
-    		@PathVariable("user") String userId,
-    		@PathVariable("file") String fileName) throws IOException {
-
-		// Process 1) request validation
-				//				pass...
-
-		// Process 2) call searching function from service layer
-		UrlResource resource = fStorageService.loadUrlResourcefromFile(userId, fileName);
-
-        String encodedFileName = UriUtils.encode(fileName, StandardCharsets.UTF_8);
-
-        // 파일 다운로드 대화상자가 뜨도록 하는 헤더를 설정해주는 것
-        // Content-Disposition 헤더에 attachment; filename="업로드 파일명" 값을 준다.
-        String contentDisposition = "attachment; filename=\"" + encodedFileName + "\"";
-
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition).body(resource);
-    }
-	
-	// !! Backup !!
-	/*
-	@PostMapping("/upload")
-	public ResponseEntity<ResponseMessage> FileUploadController(
-			@RequestParam("file") MultipartFile file) {
-		String message = "";
-		try {
-			fStoragesService.save(file);
-			
-			message = "Uploaded the file successfully: " + file.getOriginalFilename();
-			return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
-		}catch (Exception e) {
-		      message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
-		      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
-		    }
-		
-	}
 	*/
 }
