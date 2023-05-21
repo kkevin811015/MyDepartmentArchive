@@ -27,8 +27,8 @@
 					</thead>
 					<tbody>
 						<tr th:each="file : ${files.data}">
-							<td th:text="${file.fName}">filename</td>
-							<td th:text="${file.fUri}">.../saved/uri</td>
+							<td th:text="${file.fileName}">filename</td>
+							<td th:text="${file.fileUri}">.../saved/uri</td>
 							<td th:text="${file.userId}">John Doe</td>
 							<td th:text="${file.time}">20xx.xx.xx 23:59:59</td>
 						</tr>

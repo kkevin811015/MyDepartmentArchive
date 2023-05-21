@@ -1,5 +1,7 @@
 package com.boosters.mda.service;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,7 +12,9 @@ import java.util.stream.Collectors;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -100,8 +104,8 @@ public class FileStorageService implements IFileStorageService {
 				// ...Process 2)
 				FileStorageDTO dto = FileStorageDTO.builder()
 											.userId(userId)
-											.fName(file.getOriginalFilename())
-											.fUri(this.root.toString())
+											.fileName(file.getOriginalFilename())
+											.fileUri(this.root.toString())
 											.build();
 				// ...Process 3)
 				Files.copy(file.getInputStream(),
@@ -114,8 +118,8 @@ public class FileStorageService implements IFileStorageService {
 											// When(automatically created by JpaAuditing)
 											.savedUri(this.root.toString()) // Where
 											.contentType(fileContentType)	// What 1
-											.fUUIDName(uuidFileName) // What 2
-											.fOrgName(fileName) // What 3 
+											.fileUUIDName(uuidFileName) // What 2
+											.fileOrgName(fileName) // What 3 
 											.extension(fileExtension) // What 4
 											.build();
 				// Process 4)
@@ -133,32 +137,112 @@ public class FileStorageService implements IFileStorageService {
 		
 	}
 	
-//	/*
-//	 * Function: Load File
-//	 * Input: { userId, fileName }
-//	 * Output: Resource file, List<FileStorageEntity> entities
-//	 * Return: Resource files
-//	 * Process: 
-//	 */
-//	@Override
-//	public Resource loadFile(String userId, String fileName) {
-//		
-//		return null;
-//	}
-//
-//	/*
-//	 * Function: Load Files
-//	 * Input: { userId, fileNames }
-//	 * Output: List<Resource> files, List<FileStorageEntity> entities
-//	 * Return: List<Resource> files
-//	 * Process: 
-//	 */
-//	@Override
-//	public List<Resource> loadFiles(String userId, List<String> fileNames) {
-//		
-////		List<FileStorageEntity> entities = fSrepo.findByUserIdAndFOrgName(userId)
-//		
-//		return null;
-//	}
+	/*
+	 * Function: Load File
+	 * Input: { userId, fileName }
+	 * Output: Resource file, List<FileStorageEntity> entities
+	 * Return: Resource files
+	 * Process: 
+	 */
+	@Override
+	public Resource loadFile(String userId, String fileName) {
+		
+		return null;
+	}
+
+	/*
+	 * Function: Load Files
+	 * Input: { userId, fileNames }
+	 * Output: List<Resource> files, List<FileStorageEntity> entities
+	 * Return: List<Resource> files
+	 * Process: 
+	 */
+	@Override
+	public List<Resource> loadFiles(String userId, List<String> fileNames) {
+		
+//		List<FileStorageEntity> entities = fSrepo.findByUserIdAndFOrgName(userId)
+		
+		return null;
+	}
+
+	/*
+	 * Function: Load Bytes from Files
+	 * Input: { userId, fileName }
+	 * Output: ByteArray fileBytes, FileStorageEntity entity
+	 * Return: ByteArray fileBytes
+	 * Process: 1) search Entity by userId and fileName
+	 * 			2) search real file from UUID-fileName which specified by entity
+	 * 				2-1) If that file exists, perform 3)
+	 * 				2-2) If not exist, return null
+	 * 			3) return bytes of searched file
+	 */
+	@Override
+	public ByteArrayResource loadBytesfromFile(String userId, String fileName) throws IOException {
+		
+		// Process 1) search Entity
+		FileStorageEntity entity = fSrepo.findByUserIdAndFileOrgName(userId, fileName);
+		
+		// Process 2) search real(UUID) file
+		File rootDir = new File(entity.getSavedUri());
+		
+		File[] file = rootDir.listFiles( new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.contains(entity.getFileUUIDName());
+			}
+		});
+		
+		byte[] fileByte = null;
+		
+		for (File f : file) {
+			System.out.println("Searched file:" + f.getName() 
+								+ "\nPath: " + f.toPath());
+//								+ "\nURI: " + f.toURI());
+			
+			fileByte = Files.readAllBytes(f.toPath());
+		}
+		
+		return new ByteArrayResource(fileByte);
+	}
+
+	/*
+	 * Function: Load UrlResource from Files
+	 * Input: { userId, fileName }
+	 * Output: ByteArray fileBytes, FileStorageEntity entity
+	 * Return: ByteArray fileBytes
+	 * Process: 1) search Entity by userId and fileName
+	 * 			2) search real file from UUID-fileName which specified by entity
+	 * 				2-1) If that file exists, perform 3)
+	 * 				2-2) If not exist, return null
+	 * 			3) return bytes of searched file
+	 */
+	@Override
+	public UrlResource loadUrlResourcefromFile(String userId, String fileName) throws IOException {
+		
+		// Process 1) search Entity
+		FileStorageEntity entity = fSrepo.findByUserIdAndFileOrgName(userId, fileName);
+				
+		// Process 2) search real(UUID) file
+		File rootDir = new File(entity.getSavedUri());
+				
+		File[] file = rootDir.listFiles( new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.contains(entity.getFileUUIDName());
+				}
+			});
+				
+		UrlResource resource = null;
+				
+		for (File f : file) {
+			System.out.println("Searched file:" + f.getName() 
+//									+ "\nPath: " + f.toPath());
+									+ "\nURI: " + f.toURI());
+					
+			resource = new UrlResource(f.toURI());
+		}
+				
+		return resource;
+	}
 	
 }

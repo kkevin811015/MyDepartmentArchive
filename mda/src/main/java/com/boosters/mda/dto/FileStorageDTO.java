@@ -25,20 +25,20 @@ public class FileStorageDTO {
 	private LocalDateTime time;
 	
 	// Where
-	private String fUri;
+	private String fileUri;
 	
 	// What 1
 	private String contentType;
 	
 	// What 2
-	private String fName;
+	private String fileName;
 	
 	public FileStorageDTO(final FileStorageEntity entity) {
 		this.id = entity.getId(); // 삭제 예정
 		this.userId = entity.getUserId(); // Who
 		this.contentType = entity.getContentType(); // What 1
-		this.fName = entity.getFOrgName(); // What 2
-		this.fUri = entity.getSavedUri(); // Where
+		this.fileName = entity.getFileOrgName(); // What 2
+		this.fileUri = entity.getSavedUri(); // Where
 		this.time = entity.getModifiedDate(); // When
 	}
 	
@@ -48,10 +48,10 @@ public class FileStorageDTO {
 				//.id(dto.getId()) entity에서 자동 생성
 				.userId(dto.getUserId()) // Who
 				// When is automatically created by JpaAuditing
-				.savedUri(dto.getFUri()) // Where
-				.fOrgName(dto.getFName()) // What 1
-				.fUUIDName(UUID.randomUUID().toString()+ "-" + dto.getFName()) // What 2
-				.extension(dto.getFName().substring(dto.getFName().lastIndexOf("."))) // What 3
+				.savedUri(dto.getFileUri()) // Where
+				.fileOrgName(dto.getFileName()) // What 1
+				.fileUUIDName(UUID.randomUUID().toString()+ "-" + dto.getFileName()) // What 2
+				.extension(dto.getFileName().substring(dto.getFileName().lastIndexOf("."))) // What 3
 				.contentType(dto.getContentType()) // What 4
 				.build();
 	}

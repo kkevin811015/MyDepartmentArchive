@@ -1,11 +1,18 @@
 package com.boosters.mda.controller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriUtils;
+
 import com.boosters.mda.dto.FileStorageDTO;
 import com.boosters.mda.dto.ResponseDTO;
 import com.boosters.mda.entity.FileStorageEntity;
@@ -90,47 +99,81 @@ public class FileStorageController {
 //	 * Request: file Uri
 //	 * Response: files from specified path
 //	 * Return: files
-//	 * 			Message: "File Uploaded"
 //	 * Process: ...
 //	 */
-//	@GetMapping("/download/{fileName:.+}")
-//	public ResponseEntity<Resource> exampleFileDownloadController(
+//	@GetMapping("/download/{fileName}")
+//	public ResponseEntity<ByteArrayResource> exampleFileDownloadController(
 //			@PathVariable("user") String userId,
 //			@PathVariable("fileName") String fileName) {
 //		
-//		Resource file = fStorageService.loadFile(userId, fileName);
-//		
-////		mnv.setViewName("redirect:/storage/"+userId+"/");
+//		ByteArrayResource file = fStorageService.loadBytesfromFile(userId, fileName);
 //		
 //		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
 //				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
 //	}
-//	
-//	
-//	/*
-//	 * Function: File Download Controller
-//	 * Method: Get
-//	 * Request: file Uri
-//	 * Response: files from specified path
-//	 * Return: files
-//	 * 			Message: "File Uploaded"
-//	 * Process: ...
-//	 */
-//	@GetMapping("/download/{files}")
-//	public ResponseEntity<List<Resource>> FileDownloadController(
-//			@PathVariable("user") String userId,
+	
+	
+	/* ZIP 파일 리턴으로 계획
+	 * Function: File Download Controller
+	 * Method: Get
+	 * Request: files Uri
+	 * Response: zip file from files specified path
+	 * Return: zip file
+	 * Process: ...
+	 */
+	@GetMapping("/download/{file}")
+	public ResponseEntity<ByteArrayResource> FileDownloadController(
+			@PathVariable("user") String userId,
 //			@PathVariable("files") List<String> fileNames) {
-//		
-//		// 1) request validation
-//		//		pass...
-//		
-//		// 2) call searching function from service layer
-//		List<Resource> file = fStorageService.loadFiles(userId, fileNames);
-//		
-////		mnv.setViewName("redirect:/storage/"+userId+"/");
-//		
-//		return null;
-//	}
+			@PathVariable("file") String fileName) throws IOException {
+		
+		// Process 1) request validation
+		//				pass...
+		
+		// Process 2) call searching function from service layer
+		ByteArrayResource file = fStorageService.loadBytesfromFile(userId, fileName);
+		
+		// Process 3) Create and Return ResponseEntity
+		HttpHeaders headers = new HttpHeaders();
+		
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDisposition(ContentDisposition.attachment()
+										.filename(fileName, StandardCharsets.UTF_8)
+										.build()
+										);
+		
+		// Process 3) 
+		return ResponseEntity.ok().headers(headers)
+									.body(file);
+	}
+	
+	/* ZIP 파일 리턴으로 계획
+	 * Function: File Download Controller
+	 * Method: Get
+	 * Request: files Uri
+	 * Response: zip file from files specified path
+	 * Return: zip file
+	 * Process: ...
+	 */
+	@GetMapping("/attach/{file}")
+    public ResponseEntity<UrlResource> downloadAttach(
+    		@PathVariable("user") String userId,
+    		@PathVariable("file") String fileName) throws IOException {
+
+		// Process 1) request validation
+				//				pass...
+
+		// Process 2) call searching function from service layer
+		UrlResource resource = fStorageService.loadUrlResourcefromFile(userId, fileName);
+
+        String encodedFileName = UriUtils.encode(fileName, StandardCharsets.UTF_8);
+
+        // 파일 다운로드 대화상자가 뜨도록 하는 헤더를 설정해주는 것
+        // Content-Disposition 헤더에 attachment; filename="업로드 파일명" 값을 준다.
+        String contentDisposition = "attachment; filename=\"" + encodedFileName + "\"";
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition).body(resource);
+    }
 	
 	// !! Backup !!
 	/*

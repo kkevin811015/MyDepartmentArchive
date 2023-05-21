@@ -28,8 +28,8 @@ public class FileStorageEntity extends BaseTimeEntity {
 	private Long id;
 	private String userId;
 	private String contentType;
-	private String fOrgName;
-	private String fUUIDName;
+	private String fileOrgName;
+	private String fileUUIDName;
 	private String extension;
 	private String savedUri;
 }

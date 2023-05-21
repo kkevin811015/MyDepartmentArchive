@@ -22,7 +22,9 @@ public interface IFileStorageRepository extends JpaRepository<FileStorageEntity,
 	 */
 //	@Query("select s from FileStorageEntity s where s.userId = ?1")
 	List<FileStorageEntity> findByUserId(String userId);
+
+	FileStorageEntity findByUserIdAndFileOrgName(String userId, String fileOrgName);
 	
 //	@Query("select s from FileStorageEntity s where s.userId = ?1 and s.fOrgName in ?2")
-//	List<FileStorageEntity> findByUserIdAndFOrgNameIn(String userId, List<String> fOrgNames);
+	List<FileStorageEntity> findByUserIdAndFileOrgNameIn(String userId, List<String> fileOrgNames);
 }
